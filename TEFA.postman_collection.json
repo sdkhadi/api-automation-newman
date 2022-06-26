@@ -1,0 +1,254 @@
+{
+	"info": {
+		"_postman_id": "f8a646a6-f19e-494d-beed-857a5d460b65",
+		"name": "TEFA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1637627"
+	},
+	"item": [
+		{
+			"name": "Successful Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Value token is appeared\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.token).to.eql(\"QpwL5tke4Pnpja7X4\");",
+							"});",
+							"",
+							"if (pm.response.responseTime >500) {",
+							"    pm.test(\"Test Response Time failed\", function () {",
+							"        pm.expect.fail('Response time more than 200 ms');",
+							"    });",
+							"    return;",
+							"}",
+							"",
+							"const schema = {",
+							"     \"type\": \"object\",",
+							"     \"properties\": {",
+							"            \"token\": {",
+							"                \"type\": \"string\"",
+							"            }",
+							"     }",
+							"}",
+							"pm.test(\"Validating Schema\", ()=> {",
+							"    pm.response.to.have.jsonSchema(schema)",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{username}}\",\n    \"password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/login",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Unsuccessful Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"pm.test(\"Value token is appeared\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"Missing password\");",
+							"});",
+							"",
+							"if (pm.response.responseTime >500) {",
+							"    pm.test(\"Test Response Time failed\", function () {",
+							"        pm.expect.fail('Response time more than 200 ms');",
+							"    });",
+							"    return;",
+							"}",
+							"",
+							"const schema = {",
+							"     \"type\": \"object\",",
+							"     \"properties\": {",
+							"            \"error\": {",
+							"                \"type\": \"string\"",
+							"            }",
+							"     }",
+							"}",
+							"pm.test(\"Validating Schema\", ()=> {",
+							"    pm.response.to.have.jsonSchema(schema)",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{username}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/login",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get List Users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {",
+							"     \"required\": [",
+							"        \"page\",",
+							"        \"per_page\",",
+							"        \"total\",",
+							"        \"total_pages\",",
+							"        \"data\"",
+							"    ],",
+							"     \"data\": {",
+							"        \"type\": \"array\"",
+							"        },",
+							"}",
+							"",
+							"pm.test(\"Validating Schema Array\", ()=> {",
+							"    pm.response.to.have.jsonSchema(schema)",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/unknown",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"unknown"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get detail user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {",
+							"    \"data\": {",
+							"        \"avatar\": {",
+							"            \"type\": \"string\",",
+							"            \"format\": \"uri\",",
+							"            \"qt-uri-protocols\": [",
+							"                \"https\"",
+							"            ],",
+							"            \"qt-uri-extensions\": [",
+							"                \".jpg\"",
+							"            ]",
+							"        }",
+							"    },",
+							"    \"support\":{",
+							"        \"url\": {",
+							"            \"type\": \"string\",",
+							"            \"format\": \"uri\",",
+							"            \"qt-uri-protocols\": [",
+							"                \"https\"",
+							"            ]",
+							"        }",
+							"    }",
+							"}",
+							"",
+							"pm.test(\"Validating Schema uri & extension\", ()=> {",
+							"    pm.response.to.have.jsonSchema(schema)",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/users/2",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add users",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "HTTP_Header_Assertion",
+			"value": ""
+		}
+	]
+}
